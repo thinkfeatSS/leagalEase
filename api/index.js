@@ -7,6 +7,8 @@ const rateLimit = require('express-rate-limit');
 
 // Create an Express instance
 const app = express();
+app.set('trust proxy', process.env.NODE_ENV === 'production' ? 'loopback, linklocal, uniquelocal' : 'loopback');
+
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // limit each IP to 100 requests per windowMs
@@ -20,4 +22,4 @@ app.use(limiter);
 // Use routes
 app.use('/api', routes);
 // Export the app as a serverless function for Vercel
-module.exports = app;
+module.exports = app; 

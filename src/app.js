@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const routes = require('./routes');
-const errorHandler = require('./middleware/errorHandler');
+const errorHandler = require('./middleware/errorHandler.js');
 
 // Load environment variables
 dotenv.config();

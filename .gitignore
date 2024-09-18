@@ -24,3 +24,4 @@ build/
 
 # Windows system files (optional, if you're on Windows)
 Thumbs.db
+.vercel
