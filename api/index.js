@@ -33,7 +33,19 @@ app.use('/api', poetRouter);
 app.use('/api', userRouter);
 
 app.use(errorHandler);
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  server.close(() => {
+    process.exit(1);  // Exit after closing the server
+  });
+});
 
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  server.close(() => {
+    process.exit(1);  // Exit after closing the server
+  });
+});
 
 // Export the app as a serverless function for Vercel
 module.exports = app; 
