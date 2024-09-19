@@ -1,10 +1,13 @@
 const express = require('express');
-const routes = require('../src/routes');
-require('dotenv').config();
 const compression = require('compression');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const poetRouter = require('../src/routes/poetRouter');
+const userRouter = require('../src/routes/userRoutes');
+const errorHandler = require('../src/middleware/errorHandler');
 
+// Load environment variables
+require('dotenv').config();
 // Create an Express instance
 const app = express();
 app.set('trust proxy', process.env.NODE_ENV === 'production' ? 'loopback, linklocal, uniquelocal' : 'loopback');
@@ -19,7 +22,12 @@ app.use(compression());
 app.use(helmet());
 app.use(limiter);
 
-// Use routes
-app.use('/api', routes);
+// API routes
+app.use('/api', poetRouter);
+app.use('/api', userRouter);
+
+app.use(errorHandler);
+
+
 // Export the app as a serverless function for Vercel
 module.exports = app; 
