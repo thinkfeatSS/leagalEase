@@ -4,6 +4,9 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const poetRouter = require('../src/routes/poetRouter');
 const userRouter = require('../src/routes/userRoutes');
+const alphabetRouter = require('../src/routes/alphabetRouter');
+const kalamRouter = require('../src/routes/kalamRouter');
+const poemRouter = require('../src/routes/poemRouter');
 const errorHandler = require('../src/middleware/errorHandler');
 
 // Load environment variables
@@ -23,6 +26,9 @@ app.use(helmet());
 app.use(limiter);
 
 // API routes
+app.use('/api', alphabetRouter);
+app.use('/api', kalamRouter);
+app.use('/api', poemRouter);
 app.use('/api', poetRouter);
 app.use('/api', userRouter);
 

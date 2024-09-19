@@ -1,6 +1,6 @@
 const pool = require('../config/db');
 
-// Get all examples
+// Get all names
 exports.getPoet = async (req, res, next) => {
     try {
         // Using async/await to query the database
@@ -20,7 +20,7 @@ exports.getPoet = async (req, res, next) => {
       });
     }
   };
-// Get all examples
+// Get all names
 exports.getPoetById  = async (req, res, next) => {
     const { id } = req.params;  // Get the id from the URL parameters
 
@@ -29,7 +29,7 @@ exports.getPoetById  = async (req, res, next) => {
         const [rows] = await pool.query('SELECT * FROM poets WHERE id = ?', [id]);
     
         // Check if a poet was found
-        if (rows.length === 0) {
+        if (!rows.length) {
           return res.status(404).json({
             success: false,
             message: `No poet found with id: ${id}`,
@@ -50,18 +50,18 @@ exports.getPoetById  = async (req, res, next) => {
         });
       }
   };
-// Create examples
+// Create names
 exports.createPoet = async (req, res) => {
     // console.log(req.body);
-    const { example } = req.body;
+    const { name } = req.body;
     try{
-        if(!example){
+        if(!name){
             return res.status(400).json({ success: false, message: 'Please provide all fields:' });
         }
 
     // Insert the new user into the database using async/await
     const query = 'INSERT INTO poets (name) VALUES (?)';
-    const [result] = await pool.execute(query, [example]);
+    const [result] = await pool.execute(query, [name]);
     console.log(result);
      // Send success response
      res.status(201).json({
@@ -79,13 +79,13 @@ exports.createPoet = async (req, res) => {
 
 };
   
-// Update example
+// Update name
 exports.updatePoet = async (req, res) => {
     const { id } = req.params; // Get the id from the request parameters
-    const { example } = req.body; // Get the new value from the request body
+    const { name } = req.body; // Get the new value from the request body
   
     try {
-      if (!example) {
+      if (!name) {
         return res.status(400).json({
           success: false,
           message: 'Please provide the updated value for the poet',
@@ -94,7 +94,7 @@ exports.updatePoet = async (req, res) => {
   
       // Update the poet in the database
       const query = 'UPDATE poets SET name = ? WHERE id = ?';
-      const [result] = await pool.execute(query, [example, id]);
+      const [result] = await pool.execute(query, [name, id]);
   
       // Check if any rows were affected (i.e., if the poet was actually updated)
       if (result.affectedRows === 0) {
@@ -117,7 +117,7 @@ exports.updatePoet = async (req, res) => {
     }
   };
   
-// Delete example
+// Delete name
 exports.deletePoet = async (req, res) => {
     const { id } = req.params; // Get the id from the request parameters
   

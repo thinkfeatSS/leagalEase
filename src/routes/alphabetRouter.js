@@ -11,7 +11,7 @@ router.post('/alphabet',createAlphabet);
 // PUT
 router .put('/alphabet/:id',updateAlphabet); // Update example
 // DELETE
-router.delete('/alphabet/:id',deleteAlphabet); // Delete example
+router.delete('/alphabet/:id',deleteAlphabet);`` // Delete example
 
 
 module.exports = router ;
