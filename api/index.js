@@ -8,7 +8,7 @@ const alphabetRouter = require('../src/routes/alphabetRouter');
 const kalamRouter = require('../src/routes/kalamRouter');
 const poemRouter = require('../src/routes/poemRouter');
 const errorHandler = require('../src/middleware/errorHandler');
-
+const cors = require('cors'); // Import the CORS middleware
 // Load environment variables
 require('dotenv').config();
 // Create an Express instance
@@ -19,7 +19,9 @@ const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // limit each IP to 100 requests per windowMs
   });
-// Middleware to parse JSON requests
+// Enable CORS for all origins (allow cross-origin requests)
+app.use(cors());
+  // Middleware to parse JSON requests
 app.use(express.json());
 app.use(compression());
 app.use(helmet());
