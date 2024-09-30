@@ -7,6 +7,7 @@ const userRouter = require('../src/routes/userRoutes');
 const alphabetRouter = require('../src/routes/alphabetRouter');
 const kalamRouter = require('../src/routes/kalamRouter');
 const poemRouter = require('../src/routes/poemRouter');
+const mehfilRouter = require('../src/routes/mehfilRouter');
 const errorHandler = require('../src/middleware/errorHandler');
 const cors = require('cors'); // Import the CORS middleware
 // Load environment variables
@@ -28,6 +29,7 @@ app.use(helmet());
 app.use(limiter);
 
 // API routes
+app.use('/api', mehfilRouter);
 app.use('/api', alphabetRouter);
 app.use('/api', kalamRouter);
 app.use('/api', poemRouter);
