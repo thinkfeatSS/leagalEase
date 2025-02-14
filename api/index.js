@@ -5,7 +5,6 @@ const rateLimit = require('express-rate-limit');
 const errorHandler = require('../src/middleware/errorHandler');
 const cors = require('cors'); // Import the CORS middleware
 const mongoose = require("mongoose");
-
 // Routes
 const authRoutes = require("../src/routes/authRoutes");
 

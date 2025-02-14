@@ -42,6 +42,8 @@ exports.register = async (req, res) => {
   }
 };
 
+
+//  Login user
 exports.login =  async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -61,6 +63,7 @@ exports.login =  async (req, res) => {
   }
 }
 
+//  Get user Profile
 exports.getUserProfile =  async (req, res) => {
     try {
       const user = await User.findById(req.user.id).select("-password");
@@ -69,3 +72,33 @@ exports.getUserProfile =  async (req, res) => {
       res.status(500).json({ msg: "Server error", error: err.message });
     }
   }
+exports.getLawyerProfile =  async (req, res) => {
+  try {
+    const { name, city, specialization, page = 1, limit = 10 } = req.query;
+
+    const query = { role: "lawyer" };
+
+    if (name) query.name = new RegExp(name, "i"); // Case-insensitive search
+    if (city) query.city = new RegExp(city, "i");
+    if (specialization) query["profile.specialization"] = new RegExp(specialization, "i");
+
+    const lawyers = await User.find(query)
+      .select("-password") // Exclude password for security
+      .limit(parseInt(limit))
+      .skip((parseInt(page) - 1) * parseInt(limit))
+      .sort({ createdAt: -1 }); // Latest lawyers first
+
+    const total = await User.countDocuments(query);
+
+    res.json({
+      success: true,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / limit),
+      lawyers,
+    });
+  } catch (error) {
+    console.error("Error fetching lawyers:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

@@ -14,4 +14,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+
+// Indexing for better search performance
+userSchema.index({ name: "text", "profile.specialization": "text", city: "text" });
 module.exports = mongoose.model("User", userSchema);
