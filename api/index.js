@@ -30,7 +30,9 @@ app.use(compression());
 app.use(helmet());
 app.use(limiter);
 
-
+app.get('/',(req, res) => {
+  res.status(200).json({ msg: "hello api"});
+})
 app.use('/api', authRoutes);
 // 404 Handler
 app.use((req, res, next) => {

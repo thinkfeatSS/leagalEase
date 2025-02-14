@@ -9,7 +9,7 @@ const router = express.Router();
 // Register Route
 router.post("/register", upload.single("profileImage"), authController.register);
 router.post("/login", authController.login);
-router.get("/user", authMiddleware, authController.getUserProfile);
+router.get("/me", authMiddleware, authController.getUserProfile);
 
 // // Login
 // router.post("/login", async (req, res) => {
