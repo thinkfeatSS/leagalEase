@@ -5,6 +5,9 @@ const rateLimit = require('express-rate-limit');
 const errorHandler = require('../src/middleware/errorHandler');
 const cors = require('cors'); // Import the CORS middleware
 const mongoose = require("mongoose");
+
+
+
 // Routes
 const authRoutes = require("../src/routes/authRoutes");
 
@@ -29,16 +32,6 @@ app.use(compression());
 app.use(helmet());
 app.use(limiter);
 
-app.get('/',(req, res) => {
-  res.status(200).json({ msg: "hello api"});
-})
-app.use('/api', authRoutes);
-// 404 Handler
-app.use((req, res, next) => {
-  res.status(404).json({ msg: "Route not found" });
-});
-
-app.use(errorHandler);
 
 
 
@@ -47,9 +40,21 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
   // useCreateIndex: true,
 })
-  .then(() => console.log("MongoDB Connected Successfully! 🚀"))
-  .catch((err) => console.error("MongoDB Connection Error ❌", err));
+.then(() => console.log("MongoDB Connected Successfully! 🚀"))
+.catch((err) => console.error("MongoDB Connection Error ❌", err));
 
+app.get('/',(req, res) => {
+  res.status(200).json({ msg: "hello api"});
+})
+app.use('/api', authRoutes);
+app.use("/api/diary", require("../src/routes/diaryRoutes"));
+app.use("/api/appointments", require("../src/routes/appointmentRoutes"));
+// 404 Handler
+app.use((req, res, next) => {
+  res.status(404).json({ msg: "Route not found" });
+});
+
+app.use(errorHandler);
 
   
 // process.on('unhandledRejection', (reason, promise) => {

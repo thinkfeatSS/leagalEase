@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 // Register User
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, city, role, specialization, experience, description } = req.body;
+    const { name, email, password, city, role, specialization, experience, description,contact } = req.body;
 
     // Check Required Fields
     if (!name || !email || !password || !city || !role) {
@@ -31,6 +31,7 @@ exports.register = async (req, res) => {
       password: hashedPassword,
       city,
       role,
+      contact,
       profileImage,
       profile: role === "lawyer" ? { specialization, experience, description } : {},
     });
@@ -74,7 +75,7 @@ exports.getUserProfile =  async (req, res) => {
   }
 exports.getLawyerProfile =  async (req, res) => {
   try {
-    const { name, city, specialization, page = 1, limit = 10 } = req.query;
+    const { name, city, specialization, page = 1, limit = 100} = req.query;
 
     const query = { role: "lawyer" };
 
@@ -100,5 +101,43 @@ exports.getLawyerProfile =  async (req, res) => {
   } catch (error) {
     console.error("Error fetching lawyers:", error);
     res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+// Update User Profile
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, city, specialization, experience, description,contact } = req.body;
+    const userId = req.user.id; // Get user ID from authenticated request
+
+    // Find the user by ID
+    let user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Update basic fields
+    if (name) user.name = name;
+    if (city) user.city = city;
+    if (contact) user.city = contact;
+    
+    // Update profile image if uploaded
+    if (req.file) {
+      user.profileImage = req.file.path;
+    }
+
+    // Update lawyer-specific fields
+    if (user.role === "lawyer") {
+      if (specialization) user.profile.specialization = specialization;
+      if (experience) user.profile.experience = experience;
+      if (description) user.profile.description = description;
+    }
+
+    // Save the updated user profile
+    await user.save();
+    
+    res.json({ message: "Profile updated successfully", user });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };
