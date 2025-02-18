@@ -74,5 +74,5 @@ mongoose.connect(process.env.MONGO_URI, {
 // Export the app as a serverless function for Vercel
 
 // Start Server
-app.listen(5000, () => console.log(`Server running on port ${PORT}`));
-// module.exports = app; 
+// app.listen(5000, () => console.log(`Server running on port ${PORT}`));
+module.exports = app; 

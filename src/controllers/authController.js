@@ -39,6 +39,7 @@ exports.register = async (req, res) => {
     await newUser.save();
     res.status(201).json({ message: "Registered successfully!" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -55,11 +56,12 @@ exports.login =  async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
-
+    
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
-
+    
     res.status(200).json({ msg: "Login successful", token, user });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ msg: "Server error", error: err.message });
   }
 }
